@@ -439,14 +439,31 @@
         }
 
         // "kartik-v/yii2-widget-depdrop"
+	var _restoreKrajeeDepdrop = function($elem) {
+		var configDepdrop = $.extend(true, {}, eval($elem.attr('data-krajee-depdrop')));
+		var inputID = $elem.attr('id');
+		var matchID = inputID.match(regexID);
+
+		if (matchID && matchID.length === 4) {
+			for (index = 0; index < configDepdrop.depends.length; ++index) {
+				var match = configDepdrop.depends[index].match(regexID);
+				if (match && match.length === 4) {
+					configDepdrop.depends[index] = match[1] + matchID[2] + match[3];
+				}
+			}
+		}
+		$elem.depdrop(configDepdrop);
+	};
         var $hasDepdrop = $(widgetOptionsRoot.widgetItem).find('[data-krajee-depdrop]');
         if ($hasDepdrop.length > 0) {
             $hasDepdrop.each(function() {
                 if ($(this).data('select2') === undefined) {
-                    $(this).removeData().off();
-                    $(this).unbind();
-                    _restoreKrajeeDepdrop($(this));
-                }
+                     $(this).removeData().off();
+                     $(this).unbind();
+                     _restoreKrajeeDepdrop($(this));
+                  }
+                var configDepdrop = eval($(this).attr('data-krajee-depdrop'));
+                $(this).depdrop(configDepdrop);
             });
         }
 
